@@ -532,3 +532,19 @@ npm-debug.log*
 
 # --- JetBrains IDEs (Rider, WebStorm) ---
 .idea/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+
+# Others
+*.log
+*.cache
+*.db
