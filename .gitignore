@@ -548,3 +548,12 @@ obj/
 *.log
 *.cache
 *.db
+
+# Ignore appsettings files
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Staging.json
+appsettings.json
+appsettings.json
+appsettings.json
