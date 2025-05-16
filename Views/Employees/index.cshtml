@@ -1,7 +1,39 @@
+@model IEnumerable<CSharp_MVC_AssessmentJS.Models.Employee>
+
 @{
     ViewData["Title"] = "Employees";
 }
 
 <div class="text-center">
     <h1 class="display-4">Employees listing</h1>
+</div>
+
+<div class="container mt-4">
+
+    @foreach (var employee in Model)
+    {
+        <div class="card shadow-sm mb-3">
+            <div class="card-body d-flex flex-column flex-md-row justify-content-between">
+                <div class="mb-3 mb-md-0">
+                    <strong>ID:</strong> @employee.Id
+                </div>
+                <div class="mb-3 mb-md-0">
+                    <strong>Full Name:</strong> @employee.FirstName @employee.LastName
+                </div>
+                <div class="mb-3 mb-md-0">
+                    <strong>Email:</strong> @employee.Email
+                </div>
+                <div class="mb-3 mb-md-0">
+                    <strong>Phone Number:</strong> @employee.PhoneNumber 
+                </div>
+            </div>
+            
+            <div class="card-footer d-flex justify-content-between text-center">
+                <a class="btn btn-info btn-sm me-1" asp-action="View" asp-route-id="@employee.Id">View</a>
+                <a class="btn btn-warning btn-sm me-1" asp-action="Edit" asp-route-id="@employee.Id">Edit</a>
+                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@employee.Id">Delete</a>
+            </div>
+        </div>
+    }
+    
 </div>
