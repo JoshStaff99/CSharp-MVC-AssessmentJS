@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
+
 public class Company
 {
     public int Id { get; set; }
 
-    [Required] 
+    [Required]
     public string Name { get; set; }
 
     [EmailAddress]
@@ -16,5 +17,5 @@ public class Company
     [Url]
     public string? Website { get; set; }
 
-    public ICollection<Employee> Employees {get; set; } = new List<Employee>();
+    public ICollection<Employee> Employees { get; set; } = new List<Employee>();
 }
