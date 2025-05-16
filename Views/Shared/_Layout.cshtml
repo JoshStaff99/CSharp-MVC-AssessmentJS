@@ -27,10 +27,13 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-white @(ViewContext.RouteData.Values["action"] as string == "Index" ? "active-link" : "")" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-white @(ViewContext.RouteData.Values["controller"] as string == "Home" && ViewContext.RouteData.Values["action"] as string == "Index" ? "active-link" : "")" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white @(ViewContext.RouteData.Values["action"] as string == "Companies" ? "active-link" : "")" asp-area="" asp-controller="Home" asp-action="Companies">Companies</a>
+                            <a class="nav-link text-white @(ViewContext.RouteData.Values["controller"] as string == "Companies" ? "active-link" : "")" asp-area="" asp-controller="Companies" asp-action="Index">Companies</a>
+                        </li>
+                        <li class="nav-item"></li>
+                            <a class="nav-link text-white @(ViewContext.RouteData.Values["controller"] as string == "Employees" ? "active-link" : "")" asp-area="" asp-controller="Employees" asp-action="Index">Employees</a>
                         </li>
                     </ul>
                 </div>
@@ -44,7 +47,7 @@
     </div>
     <footer class="footer mt-auto py-3 text-white fixed-bottom border-top shadow" style="background-color: #002060; border-top: 2px solid #00123a;">
         <div class="container text-center">
-            &copy; 2025 - CSharp_MVC_AssessmentJS - <a class="text-white text-decoration-underline" asp-area="" asp-controller="Home" asp-action="Companies">Companies</a>
+            &copy; 2025 - CSharp_MVC_AssessmentJS - <a class="text-white text-decoration-underline" asp-area="" asp-controller="Companies" asp-action="Index">Companies</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
