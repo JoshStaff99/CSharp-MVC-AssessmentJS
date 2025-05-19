@@ -32,10 +32,14 @@
                         <li class="nav-item">
                             <a class="nav-link text-white @(ViewContext.RouteData.Values["controller"] as string == "Companies" ? "active-link" : "")" asp-area="" asp-controller="Companies" asp-action="Index">Companies</a>
                         </li>
-                        <li class="nav-item"></li>
+                        <li class="nav-item">
                             <a class="nav-link text-white @(ViewContext.RouteData.Values["controller"] as string == "Employees" ? "active-link" : "")" asp-area="" asp-controller="Employees" asp-action="Index">Employees</a>
                         </li>
                     </ul>
+                    <div class="d-flex ms-auto gap-2">
+                        <a class="btn btn-success btn-sm" asp-area="" asp-controller="Employees" asp-action="Create">Add Employee</a>
+                        <a class="btn btn-primary btn-sm" asp-area="" asp-controller="Companies" asp-action="Create">Add Company</a>
+                    </div>
                 </div>
             </div>
         </nav>

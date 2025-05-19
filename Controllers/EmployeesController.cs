@@ -34,6 +34,8 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         // GET: Employees/Create
         public IActionResult Create()
         {
+            // Pass companies as SelectList to ViewData to populate dropdown in the view
+            ViewData["Companies"] = new SelectList(_context.Companies, "Id", "Name");
             return View();
         }
 
@@ -44,10 +46,13 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employee);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                _context.Add(employee); // Add the new employee to the database
+                _context.SaveChanges(); // Save changes to the database
+                return RedirectToAction(nameof(Index)); // Redirect to the Index page
             }
+
+            // Repopulate the companies dropdown if model state is invalid
+            ViewData["Companies"] = new SelectList(_context.Companies, "Id", "Name", employee.CompanyId);
             return View(employee);
         }
 
