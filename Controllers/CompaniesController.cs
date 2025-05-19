@@ -21,8 +21,8 @@ namespace CSharp_MVC_AssessmentJS.Controllers
             return View(companies);
         }
 
-        // GET: Companies/Details/5
-        public IActionResult Details(int? id)
+        // GET: Companies/Show/5
+        public IActionResult Show(int? id)
         {
             if (id == null) return NotFound();
             var company = _context.Companies.FirstOrDefault(m => m.Id == id);

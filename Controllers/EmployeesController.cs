@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CSharp_MVC_AssessmentJS.Models;
 using CompanyEmployeeApp.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 
 namespace CSharp_MVC_AssessmentJS.Controllers
@@ -21,8 +22,8 @@ namespace CSharp_MVC_AssessmentJS.Controllers
             return View(employees);
         }
 
-        // GET: Employees/Details/5
-        public IActionResult Details(int? id)
+        // GET: Employees/Show/5
+        public IActionResult Show(int? id)
         {
             if (id == null) return NotFound();
             var employee = _context.Employees.FirstOrDefault(m => m.Id == id);
@@ -54,8 +55,13 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         public IActionResult Edit(int? id)
         {
             if (id == null) return NotFound();
+
             var employee = _context.Employees.Find(id);
             if (employee == null) return NotFound();
+
+            // Pass companies as SelectList to ViewData
+            ViewData["Companies"] = new SelectList(_context.Companies, "Id", "Name");
+
             return View(employee);
         }
 
@@ -65,12 +71,16 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         public IActionResult Edit(int id, [Bind("Id,FirstName,LastName,Email,PhoneNumber,CompanyId")] Employee employee)
         {
             if (id != employee.Id) return NotFound();
+
             if (ModelState.IsValid)
             {
-                _context.Update(employee);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                _context.Update(employee); // Update the employee in the context
+                _context.SaveChanges();    // Save the changes to the database
+                return RedirectToAction(nameof(Index)); // Redirect to the Index page
             }
+
+            // Repopulate the companies dropdown if model state is invalid
+            ViewData["Companies"] = new SelectList(_context.Companies, "Id", "Name", employee.CompanyId);
             return View(employee);
         }
 
