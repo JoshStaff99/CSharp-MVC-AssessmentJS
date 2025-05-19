@@ -29,9 +29,14 @@
             </div>
             
             <div class="card-footer d-flex justify-content-between text-center">
-                <a class="btn btn-info btn-sm me-1" asp-action="View" asp-route-id="@company.Id">View</a>
+                <a class="btn btn-info btn-sm me-1" asp-action="Show" asp-route-id="@company.Id">View</a>
                 <a class="btn btn-warning btn-sm me-1" asp-action="Edit" asp-route-id="@company.Id">Edit</a>
-                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@company.Id">Delete</a>
+                <form asp-action="Delete" asp-route-id="@company.Id" method="post" 
+                    onsubmit="return confirm('Are you sure you want to delete this company?');" 
+                    style="display:inline;">
+                    <input type="hidden" name="__RequestVerificationToken" />
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
             </div>
         </div>
     }

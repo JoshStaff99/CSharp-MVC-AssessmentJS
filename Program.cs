@@ -16,9 +16,13 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ApplicationDbContext>();
-    
+
     try
     {
+        // ✅ Apply any pending migrations
+        context.Database.Migrate();
+
+        // ✅ Now seed the data
         DbSeeder.Seed(context);
     }
     catch (Exception ex)
