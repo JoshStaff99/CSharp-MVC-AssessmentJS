@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 🔹 Add DbContext to the DI container
+// Add DbContext to the DI container
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -11,7 +11,7 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// 🔹 Seed the database
+// Seed the database
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -19,10 +19,10 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
-        // ✅ Apply any pending migrations
+        // Apply any pending migrations
         context.Database.Migrate();
 
-        // ✅ Now seed the data
+        // seed the data
         DbSeeder.Seed(context);
     }
     catch (Exception ex)
@@ -32,7 +32,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// 🔹 Configure the HTTP request pipeline
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -41,7 +41,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// 🔹 Enable serving static files (like logos or images)
+// Enable serving static files (like logos or images)
 app.UseStaticFiles();
 
 app.UseRouting();
