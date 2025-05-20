@@ -42,17 +42,61 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         // POST: Employees/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("FirstName,LastName,Email,PhoneNumber,CompanyId")] Employee employee)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,PhoneNumber,CompanyId")] Employee employee)
         {
-            if (ModelState.IsValid)
+            // Add extensive logging
+            Console.WriteLine("Create POST action called");
+            Console.WriteLine($"Employee ID (may be empty for new entity): {employee.Id}");
+            Console.WriteLine($"Employee FirstName: {employee.FirstName}");
+            Console.WriteLine($"Employee LastName: {employee.LastName}");
+
+            // Log ModelState errors if any
+            if (!ModelState.IsValid)
             {
-                _context.Add(employee); // Add the new employee to the database
-                _context.SaveChanges(); // Save changes to the database
-                return RedirectToAction(nameof(Index)); // Redirect to the Index page
+                Console.WriteLine("ModelState is invalid:");
+                foreach (var state in ModelState)
+                {
+                    if (state.Value.Errors.Count > 0)
+                    {
+                        foreach (var error in state.Value.Errors)
+                        {
+                            Console.WriteLine($"- Error in {state.Key}: {error.ErrorMessage}");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("ModelState is valid");
             }
 
-            // Repopulate the companies dropdown if model state is invalid
-            ViewData["Companies"] = new SelectList(_context.Companies, "Id", "Name", employee.CompanyId);
+            try
+            {
+                Console.WriteLine("Attempting to add employee to context");
+
+                // Add new employee
+                await _context.Employees.AddAsync(employee);
+
+                Console.WriteLine("Attempting to save changes");
+                int rowsAffected = await _context.SaveChangesAsync();
+                Console.WriteLine($"SaveChangesAsync completed, rows affected: {rowsAffected}");
+
+                // Commit transaction explicitly (optional for Create, but included for parity)
+                using var transaction = await _context.Database.BeginTransactionAsync();
+                await transaction.CommitAsync();
+                Console.WriteLine("Transaction committed");
+
+                Console.WriteLine("Redirecting to Index");
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected exception: {ex.Message}");
+                ModelState.AddModelError("", "An unexpected error occurred.");
+            }
+
+            Console.WriteLine("Preparing to re-render Create view");
+            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", employee.CompanyId);
             return View(employee);
         }
 
