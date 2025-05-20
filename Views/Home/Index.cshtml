@@ -1,8 +1,61 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model CSharp_MVC_AssessmentJS.Models.ViewModels.AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to the Home page</h1>
-    <p>use the navigation links to move to different pages</p>
+<div class="container mt-4">
+    <h2 class="mb-4">System Admin Dashboard</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h4>Total Companies</h4>
+                    <p class="display-4">@Model.TotalCompanies</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h4>Total Employees</h4>
+                    <p class="display-4">@Model.TotalEmployees</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h4>Recently Added Companies</h4>
+            <ul class="list-group">
+                @foreach (var company in Model.RecentCompanies)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @company.Name
+                        <a asp-controller="Companies" asp-action="Show" asp-route-id="@company.Id" class="btn btn-sm btn-info">View</a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div class="col-md-6">
+            <h4>Recently Added Employees</h4>
+            <ul class="list-group">
+                @foreach (var employee in Model.RecentEmployees)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @employee.FirstName @employee.LastName
+                        <a asp-controller="Employees" asp-action="Show" asp-route-id="@employee.Id" class="btn btn-sm btn-info">View</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-controller="Companies" asp-action="Index" class="btn btn-outline-primary me-2">Manage Companies</a>
+        <a asp-controller="Employees" asp-action="Index" class="btn btn-outline-success">Manage Employees</a>
+    </div>
 </div>
