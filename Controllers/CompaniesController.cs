@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using CSharp_MVC_AssessmentJS.Models;
 using CompanyEmployeeApp.Data;
 using System.Linq;
@@ -25,11 +26,16 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         public IActionResult Show(int? id)
         {
             if (id == null) return NotFound();
-            var company = _context.Companies.FirstOrDefault(m => m.Id == id);
+
+            var company = _context.Companies
+                .Include(c => c.Employees) // Include associated employees
+                .FirstOrDefault(m => m.Id == id);
+
             if (company == null) return NotFound();
+
             return View(company);
         }
-
+        
         // GET: Companies/Create
         public IActionResult Create()
         {
