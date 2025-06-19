@@ -501,12 +501,6 @@ artifacts/
 node_modules/
 package-lock.json
 
-# Tailwind output (only if you're generating into wwwroot)
-wwwroot/css/site.css
-
-# Optional: Ignore all CSS in wwwroot if it's generated
-# wwwroot/css/
-
 # --- VS Code ---
 .vscode/
 *.code-workspace

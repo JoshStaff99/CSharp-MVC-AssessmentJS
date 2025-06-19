@@ -46,3 +46,11 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.nav-height {
+  height: 100% !important;
+}
+
+.nav-padding {
+  padding: 15px;
+}
