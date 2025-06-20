@@ -10,6 +10,22 @@
 
 <div class="container mt-4">
 
+    @if (TempData["SuccessCreateEmployee"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            @TempData["SuccessCreateEmployee"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["SuccessMessageEmployee"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            @TempData["SuccessMessageEmployee"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     @foreach (var employee in Model)
     {
         <div class="card shadow-sm mb-3">

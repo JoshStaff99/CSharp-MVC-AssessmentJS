@@ -44,12 +44,6 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,PhoneNumber,CompanyId")] Employee employee)
         {
-            // Add extensive logging
-            Console.WriteLine("Create POST action called");
-            Console.WriteLine($"Employee ID (may be empty for new entity): {employee.Id}");
-            Console.WriteLine($"Employee FirstName: {employee.FirstName}");
-            Console.WriteLine($"Employee LastName: {employee.LastName}");
-
             // Log ModelState errors if any
             if (!ModelState.IsValid)
             {
@@ -72,21 +66,16 @@ namespace CSharp_MVC_AssessmentJS.Controllers
 
             try
             {
-                Console.WriteLine("Attempting to add employee to context");
-
                 // Add new employee
                 await _context.Employees.AddAsync(employee);
 
-                Console.WriteLine("Attempting to save changes");
                 int rowsAffected = await _context.SaveChangesAsync();
-                Console.WriteLine($"SaveChangesAsync completed, rows affected: {rowsAffected}");
 
-                // Commit transaction explicitly (optional for Create, but included for parity)
                 using var transaction = await _context.Database.BeginTransactionAsync();
                 await transaction.CommitAsync();
-                Console.WriteLine("Transaction committed");
 
-                Console.WriteLine("Redirecting to Index");
+                TempData["SuccessCreateEmployee"] = "Employee Created successfully!";
+
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -95,8 +84,8 @@ namespace CSharp_MVC_AssessmentJS.Controllers
                 ModelState.AddModelError("", "An unexpected error occurred.");
             }
 
-            Console.WriteLine("Preparing to re-render Create view");
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", employee.CompanyId);
+
             return View(employee);
         }
 

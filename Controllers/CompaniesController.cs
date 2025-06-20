@@ -51,6 +51,9 @@ namespace CSharp_MVC_AssessmentJS.Controllers
             {
                 _context.Add(company);
                 _context.SaveChanges();
+
+                TempData["SuccessCreateCompany"] = "Company Created successfully!";
+                
                 return RedirectToAction(nameof(Index));
             }
             return View(company);
