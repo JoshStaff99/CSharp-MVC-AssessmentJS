@@ -182,6 +182,9 @@ namespace CSharp_MVC_AssessmentJS.Controllers
                     Console.WriteLine("Transaction committed");
 
                     Console.WriteLine("Redirecting to Index");
+
+                    TempData["SuccessEditEmployee"] = "Employee edited successfully!";
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -202,6 +205,7 @@ namespace CSharp_MVC_AssessmentJS.Controllers
 
             Console.WriteLine("Preparing to re-render Edit view");
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", employee.CompanyId);
+
             return View(employee);
         }
 

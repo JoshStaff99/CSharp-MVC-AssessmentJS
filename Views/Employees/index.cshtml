@@ -10,6 +10,14 @@
 
 <div class="container mt-4">
 
+    @if (TempData["SuccessEditEmployee"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            @TempData["SuccessEditEmployee"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     @if (TempData["SuccessCreateEmployee"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">

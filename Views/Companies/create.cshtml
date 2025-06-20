@@ -24,7 +24,7 @@
     <div class="mb-3">
         <label asp-for="LogoPath" class="form-label"></label>
         <select asp-for="LogoPath" asp-items="@(ViewData["Companies"] as SelectList)" class="form-select">
-            <option value="">Select a Company</option>
+            <option value="">Add a logo</option>
         </select>
         <span asp-validation-for="LogoPath" class="text-danger"></span>
     </div>
