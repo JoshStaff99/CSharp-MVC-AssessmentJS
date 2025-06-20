@@ -228,14 +228,20 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id, string returnUrl)
         {
             var employeeToDelete = _context.Employees.Find(id);
             if (employeeToDelete != null)
             {
                 _context.Employees.Remove(employeeToDelete);
                 _context.SaveChanges();
+
+                TempData["SuccessMessageEmployee"] = "Employee deleted successfully!";
             }
+
+            if (Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+
             return RedirectToAction(nameof(Index));
         }
     }

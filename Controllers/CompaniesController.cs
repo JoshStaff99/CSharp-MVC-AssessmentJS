@@ -92,14 +92,30 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         // POST: Companies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id, string returnUrl)
         {
             var companyToDelete = _context.Companies.Find(id);
             if (companyToDelete != null)
             {
+                bool hasEmployees = _context.Employees.Any(e => e.CompanyId == companyToDelete.Id);
+                if (hasEmployees)
+                {
+                    TempData["DeleteError"] = true;
+                    TempData["ErrorMessage"] = "Cannot delete company: there are employees associated with this company.";
+
+                    // Ensure the return URL is local to prevent open redirect attacks
+                    if (Url.IsLocalUrl(returnUrl))
+                        return Redirect(returnUrl);
+
+                    return RedirectToAction(nameof(Index));
+                }
+
                 _context.Companies.Remove(companyToDelete);
                 _context.SaveChanges();
+
+                TempData["SuccessMessageCompany"] = "Company deleted successfully!";
             }
+
             return RedirectToAction(nameof(Index));
         }
     }
