@@ -15,9 +15,9 @@ namespace CompanyEmployeeApp.Data
             {
                 var companies = new[]
                 {
-                    new Company { Name = "TechCorp", Email = "info@techcorp.com", Website = "http://techcorp.com" },
-                    new Company { Name = "InnoSoft", Email = "contact@innosoft.com", Website = "http://innosoft.com" },
-                    new Company { Name = "DevSolutions", Email = "hello@devsolutions.com", Website = "http://devsolutions.com" }
+                    new Company { Name = "TechCorp", Email = "info@techcorp.com", Website = "http://techcorp.com", LogoPath = "wwwroot/logos/placeholder1.svg"},
+                    new Company { Name = "InnoSoft", Email = "contact@innosoft.com", Website = "http://innosoft.com", LogoPath = "wwwroot/logos/placeholder1.svg" },
+                    new Company { Name = "DevSolutions", Email = "hello@devsolutions.com", Website = "http://devsolutions.com", LogoPath = "wwwroot/logos/placeholder1.svg" }
                 };
 
                 context.Companies.AddRange(companies);

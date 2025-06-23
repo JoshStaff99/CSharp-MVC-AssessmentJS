@@ -6,8 +6,8 @@
 
 <h2>Edit @Model.Name</h2>
 
-<form asp-action="Edit" method="post" class="mt-4">
-    @* Hidden ID field *@
+<form asp-action="Edit" method="post" enctype="multipart/form-data" class="mt-4">
+    @Html.AntiForgeryToken()
     <input type="hidden" asp-for="Id" />
 
     <div class="mb-3">
@@ -23,11 +23,18 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="LogoPath" class="form-label"></label>
-        <select asp-for="LogoPath" asp-items="@(ViewData["Companies"] as SelectList)" class="form-select">
-            <option value="">Add a logo</option>
-        </select>
-        <span asp-validation-for="LogoPath" class="text-danger"></span>
+        <label class="form-label">Upload New Logo</label>
+        <input type="file" name="LogoFile" class="form-control" />
+        <small class="text-muted">Leave blank to keep the current logo.</small>
+        <span asp-validation-for="LogoFile" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Current Logo:</label><br />
+        <img src="@(string.IsNullOrEmpty(Model.LogoPath) ? "/logos/placeholder.svg" : Model.LogoPath)"
+            onerror="this.onerror=null;this.src='/logos/placeholder.svg';"
+            alt="Company Logo"
+            style="max-height: 100px;" />
     </div>
 
     <div class="mb-3">
@@ -39,3 +46,7 @@
     <button type="submit" class="btn btn-primary">Save Changes</button>
     <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

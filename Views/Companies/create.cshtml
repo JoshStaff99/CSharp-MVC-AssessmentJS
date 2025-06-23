@@ -6,7 +6,7 @@
 
 <h2>Create New Company</h2>
 
-<form asp-action="Create" method="post" class="mt-4">
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="mt-4">
     @Html.AntiForgeryToken()
 
     <div class="mb-3">
@@ -22,11 +22,9 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="LogoPath" class="form-label"></label>
-        <select asp-for="LogoPath" asp-items="@(ViewData["Companies"] as SelectList)" class="form-select">
-            <option value="">Add a logo</option>
-        </select>
-        <span asp-validation-for="LogoPath" class="text-danger"></span>
+        <label class="form-label">Company Logo</label>
+        <input type="file" name="LogoFile" class="form-control" />
+        <span asp-validation-for="LogoFile" class="text-danger"></span>
     </div>
 
     <div class="mb-3">

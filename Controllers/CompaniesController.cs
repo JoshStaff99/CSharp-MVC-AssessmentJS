@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using CSharp_MVC_AssessmentJS.Models;
 using CompanyEmployeeApp.Data;
 using System.Linq;
+using System.IO;
 
 namespace CSharp_MVC_AssessmentJS.Controllers
 {
@@ -45,16 +47,33 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         // POST: Companies/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Name,Email,LogoPath,Website")] Company company)
+        public async Task<IActionResult> Create(Company company)
         {
             if (ModelState.IsValid)
             {
+                if (company.LogoFile != null && company.LogoFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logos");
+                    Directory.CreateDirectory(uploadsFolder); // ensure the folder exists
+
+                    var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(company.LogoFile.FileName);
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await company.LogoFile.CopyToAsync(stream);
+                    }
+
+                    company.LogoPath = "/logos/" + uniqueFileName;
+                }
+
                 _context.Add(company);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 TempData["SuccessCreateCompany"] = "Company Created successfully!";
                 return RedirectToAction(nameof(Index));
             }
+
             return View(company);
         }
 
@@ -70,18 +89,42 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         // POST: Companies/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,Name,Email,LogoPath,Website")] Company company)
+        public async Task<IActionResult> Edit(int id, Company company)
         {
             if (id != company.Id) return NotFound();
+
             if (ModelState.IsValid)
             {
-                _context.Update(company);
-                _context.SaveChanges();
+                var existingCompany = await _context.Companies.FindAsync(id);
+                if (existingCompany == null) return NotFound();
+
+                existingCompany.Name = company.Name;
+                existingCompany.Email = company.Email;
+                existingCompany.Website = company.Website;
+
+                if (company.LogoFile != null && company.LogoFile.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "logos");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(company.LogoFile.FileName);
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await company.LogoFile.CopyToAsync(stream);
+                    }
+
+                    existingCompany.LogoPath = "/logos/" + uniqueFileName;
+                }
+
+                _context.Update(existingCompany);
+                await _context.SaveChangesAsync();
 
                 TempData["SuccessEditCompany"] = "Company edited successfully!";
-
                 return RedirectToAction(nameof(Index));
             }
+
             return View(company);
         }
 
