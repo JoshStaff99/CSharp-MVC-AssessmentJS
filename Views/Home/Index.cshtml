@@ -38,6 +38,10 @@
                     </li>
                 }
             </ul>
+
+            <div class="mt-4 d-flex justify-content-end">
+                <a asp-controller="Companies" asp-action="Index" class="btn btn-outline-primary float-right">Manage Companies</a>
+            </div>
         </div>
 
         <div class="col-md-6 mt-4 mt-md-0">
@@ -51,11 +55,10 @@
                     </li>
                 }
             </ul>
-        </div>
-    </div>
 
-    <div class="mt-4">
-        <a asp-controller="Companies" asp-action="Index" class="btn btn-outline-primary me-2">Manage Companies</a>
-        <a asp-controller="Employees" asp-action="Index" class="btn btn-outline-success">Manage Employees</a>
+            <div class="mt-4 d-flex justify-content-end">
+                <a asp-controller="Employees" asp-action="Index" class="btn btn-outline-success float-right">Manage Employees</a>
+            </div>
+        </div>
     </div>
 </div>
