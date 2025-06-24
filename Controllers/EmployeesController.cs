@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using CSharp_MVC_AssessmentJS.Models;
 using CompanyEmployeeApp.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace CSharp_MVC_AssessmentJS.Controllers
@@ -18,7 +19,9 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         // GET: Employees
         public IActionResult Index()
         {
-            var employees = _context.Employees.ToList();
+            var employees = _context.Employees
+                .Include(e => e.Company)
+                .ToList();
             return View(employees);
         }
 
