@@ -30,6 +30,9 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         {
             if (id == null) return NotFound();
             var employee = _context.Employees.FirstOrDefault(m => m.Id == id);
+            var employees = _context.Employees
+                .Include(e => e.Company)
+                .ToList();
             if (employee == null) return NotFound();
             return View(employee);
         }
