@@ -9,20 +9,21 @@
 <form asp-action="Create" method="post" class="mt-4">
     @Html.AntiForgeryToken()
 
-    <div class="mb-3">
-        <label asp-for="FirstName" class="form-label"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
+    <div class="row mb-3">
+        <div class="col">
+            <label asp-for="FirstName" class="form-label">First Name</label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="LastName" class="form-label">Last Name</label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
     </div>
 
     <div class="mb-3">
-        <label asp-for="LastName" class="form-label"></label>
-        <input asp-for="LastName" class="form-control" />
-        <span asp-validation-for="LastName" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="CompanyId" class="form-label"></label>
+        <label asp-for="CompanyId" class="form-label">Select Company</label>
         <select asp-for="CompanyId" asp-items="@(ViewData["Companies"] as SelectList)" class="form-select">
             <option value="">Select a Company</option>
         </select>
