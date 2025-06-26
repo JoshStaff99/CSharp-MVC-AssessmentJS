@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CSharp_MVC_AssessmentJS.Models
 {
@@ -17,6 +19,9 @@ namespace CSharp_MVC_AssessmentJS.Models
 
         [Url]
         public string? Website { get; set; }
+
+        [NotMapped]
+        public IFormFile? LogoFile { get; set; }
 
         public ICollection<Employee> Employees { get; set; } = new List<Employee>();
     }

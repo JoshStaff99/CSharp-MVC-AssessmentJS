@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using CSharp_MVC_AssessmentJS.Models;
 using CompanyEmployeeApp.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace CSharp_MVC_AssessmentJS.Controllers
@@ -18,7 +19,9 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         // GET: Employees
         public IActionResult Index()
         {
-            var employees = _context.Employees.ToList();
+            var employees = _context.Employees
+                .Include(e => e.Company)
+                .ToList();
             return View(employees);
         }
 
@@ -27,6 +30,9 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         {
             if (id == null) return NotFound();
             var employee = _context.Employees.FirstOrDefault(m => m.Id == id);
+            var employees = _context.Employees
+                .Include(e => e.Company)
+                .ToList();
             if (employee == null) return NotFound();
             return View(employee);
         }
@@ -44,12 +50,6 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,PhoneNumber,CompanyId")] Employee employee)
         {
-            // Add extensive logging
-            Console.WriteLine("Create POST action called");
-            Console.WriteLine($"Employee ID (may be empty for new entity): {employee.Id}");
-            Console.WriteLine($"Employee FirstName: {employee.FirstName}");
-            Console.WriteLine($"Employee LastName: {employee.LastName}");
-
             // Log ModelState errors if any
             if (!ModelState.IsValid)
             {
@@ -72,21 +72,16 @@ namespace CSharp_MVC_AssessmentJS.Controllers
 
             try
             {
-                Console.WriteLine("Attempting to add employee to context");
-
                 // Add new employee
                 await _context.Employees.AddAsync(employee);
 
-                Console.WriteLine("Attempting to save changes");
                 int rowsAffected = await _context.SaveChangesAsync();
-                Console.WriteLine($"SaveChangesAsync completed, rows affected: {rowsAffected}");
 
-                // Commit transaction explicitly (optional for Create, but included for parity)
                 using var transaction = await _context.Database.BeginTransactionAsync();
                 await transaction.CommitAsync();
-                Console.WriteLine("Transaction committed");
 
-                Console.WriteLine("Redirecting to Index");
+                TempData["SuccessCreateEmployee"] = "Employee Created successfully!";
+
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -95,8 +90,8 @@ namespace CSharp_MVC_AssessmentJS.Controllers
                 ModelState.AddModelError("", "An unexpected error occurred.");
             }
 
-            Console.WriteLine("Preparing to re-render Create view");
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", employee.CompanyId);
+
             return View(employee);
         }
 
@@ -193,6 +188,9 @@ namespace CSharp_MVC_AssessmentJS.Controllers
                     Console.WriteLine("Transaction committed");
 
                     Console.WriteLine("Redirecting to Index");
+
+                    TempData["SuccessEditEmployee"] = "Employee edited successfully!";
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -213,6 +211,7 @@ namespace CSharp_MVC_AssessmentJS.Controllers
 
             Console.WriteLine("Preparing to re-render Edit view");
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", employee.CompanyId);
+
             return View(employee);
         }
 
@@ -228,14 +227,20 @@ namespace CSharp_MVC_AssessmentJS.Controllers
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id, string returnUrl)
         {
             var employeeToDelete = _context.Employees.Find(id);
             if (employeeToDelete != null)
             {
                 _context.Employees.Remove(employeeToDelete);
                 _context.SaveChanges();
+
+                TempData["SuccessMessageEmployee"] = "Employee deleted successfully!";
             }
+
+            if (Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+
             return RedirectToAction(nameof(Index));
         }
     }
